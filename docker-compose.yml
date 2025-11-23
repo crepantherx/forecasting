@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - CLASSICAL_SERVICE_URL=http://classical:8001
+      - ML_SERVICE_URL=http://ml:8002
+      - DL_SERVICE_URL=http://dl:8003
+    depends_on:
+      - classical
+      - ml
+      - dl
+    networks:
+      - forecasting-network
+
+  classical:
+    build:
+      context: ./classical-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    networks:
+      - forecasting-network
+
+  ml:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    networks:
+      - forecasting-network
+
+  dl:
+    build:
+      context: ./dl-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    networks:
+      - forecasting-network
+
+  frontend:
+    build:
+      context: ./frontend-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - gateway
+    networks:
+      - forecasting-network
+
+networks:
+  forecasting-network:
+    driver: bridge
