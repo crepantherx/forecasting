@@ -1,0 +1,52 @@
+services:
+  # Gateway Service
+  - type: web
+    name: wifi-forecasting-gateway
+    env: docker
+    dockerfilePath: ./gateway/Dockerfile
+    dockerContext: ./gateway
+    envVars:
+      - key: CLASSICAL_SERVICE_URL
+        value: https://wifi-forecasting-classical.onrender.com
+      - key: ML_SERVICE_URL
+        value: https://wifi-forecasting-ml.onrender.com
+      - key: DL_SERVICE_URL
+        value: https://wifi-forecasting-dl.onrender.com
+    healthCheckPath: /
+    plan: free
+
+  # Classical Service
+  - type: web
+    name: wifi-forecasting-classical
+    env: docker
+    dockerfilePath: ./classical-service/Dockerfile
+    dockerContext: ./classical-service
+    healthCheckPath: /
+    plan: free
+
+  # ML Service
+  - type: web
+    name: wifi-forecasting-ml
+    env: docker
+    dockerfilePath: ./ml-service/Dockerfile
+    dockerContext: ./ml-service
+    healthCheckPath: /
+    plan: free
+
+  # DL Service
+  - type: web
+    name: wifi-forecasting-dl
+    env: docker
+    dockerfilePath: ./dl-service/Dockerfile
+    dockerContext: ./dl-service
+    healthCheckPath: /
+    plan: free
+
+  # Frontend Service
+  - type: web
+    name: wifi-forecasting-frontend
+    env: docker
+    dockerfilePath: ./frontend-service/Dockerfile
+    dockerContext: ./frontend-service
+    healthCheckPath: /
+    plan: free

@@ -1,25 +1,34 @@
 # WiFi Service Demand Forecasting System
 
-Complete WiFi service demand forecasting system for Australian cities with Docker deployment support.
+Complete WiFi service demand forecasting system for Australian cities with multiple deployment options.
 
 ## Quick Start
 
-### Option 1: Docker (Recommended for Production)
+### Option 1: Docker Compose (Recommended for Local)
 
 ```bash
-# Build and start all services
 docker-compose up --build
-
-# Access the application
-# Frontend: http://localhost:8080
-# API Gateway: http://localhost:8000
+# Access: http://localhost:8080
 ```
 
 ### Option 2: Shell Script (Development)
 
 ```bash
-# Start all services locally
 ./start_services.sh
+# Access: http://localhost:8080
+```
+
+### Option 3: Render.com (Production)
+
+See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed instructions.
+
+```bash
+# Push to GitHub
+git init && git add . && git commit -m "Initial commit"
+git remote add origin <your-repo-url>
+git push -u origin main
+
+# Deploy on Render using render.yaml blueprint
 ```
 
 ## Features
@@ -41,7 +50,8 @@ Frontend (8080) → Gateway (8000) → Classical (8001)
 
 ## Documentation
 
-- [Docker Deployment Guide](DOCKER_DEPLOYMENT.md)
+- [Docker Deployment](DOCKER_DEPLOYMENT.md)
+- [Render.com Deployment](RENDER_DEPLOYMENT.md)
 - [Multivariate Forecasting](MULTIVARIATE_FORECASTING.md)
 
 ## Tech Stack
@@ -50,7 +60,15 @@ Frontend (8080) → Gateway (8000) → Classical (8001)
 - **ML/DL**: scikit-learn, statsmodels, Ridge regression
 - **Frontend**: FastAPI + HTML/CSS/JS, Chart.js
 - **Database**: SQLite
-- **Deployment**: Docker Compose
+- **Deployment**: Docker Compose, Render.com
+
+## Deployment Options Comparison
+
+| Method | Best For | Pros | Cons |
+|--------|----------|------|------|
+| Shell Script | Development | Fast, simple | Manual management |
+| Docker Compose | Local/Testing | Isolated, reproducible | Requires Docker |
+| Render.com | Production | Managed, scalable | Free tier has limits |
 
 ## Development
 
