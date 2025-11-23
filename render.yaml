@@ -12,7 +12,8 @@ services:
         value: https://wifi-forecasting-ml.onrender.com
       - key: DL_SERVICE_URL
         value: https://wifi-forecasting-dl.onrender.com
-    healthCheckPath: /
+      - key: PORT
+        value: 10000
     plan: free
 
   # Classical Service
@@ -21,7 +22,9 @@ services:
     env: docker
     dockerfilePath: ./classical-service/Dockerfile
     dockerContext: ./classical-service
-    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
     plan: free
 
   # ML Service
@@ -30,7 +33,9 @@ services:
     env: docker
     dockerfilePath: ./ml-service/Dockerfile
     dockerContext: ./ml-service
-    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
     plan: free
 
   # DL Service
@@ -39,7 +44,9 @@ services:
     env: docker
     dockerfilePath: ./dl-service/Dockerfile
     dockerContext: ./dl-service
-    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
     plan: free
 
   # Frontend Service
@@ -48,5 +55,7 @@ services:
     env: docker
     dockerfilePath: ./frontend-service/Dockerfile
     dockerContext: ./frontend-service
-    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
     plan: free
