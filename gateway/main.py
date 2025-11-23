@@ -20,10 +20,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Service URLs
-CLASSICAL_SERVICE_URL = "http://localhost:8001"
-ML_SERVICE_URL = "http://localhost:8002"
-DL_SERVICE_URL = "http://localhost:8003"
+# Service URLs - read from environment variables for Docker compatibility
+import os
+CLASSICAL_SERVICE_URL = os.getenv("CLASSICAL_SERVICE_URL", "http://localhost:8001")
+ML_SERVICE_URL = os.getenv("ML_SERVICE_URL", "http://localhost:8002")
+DL_SERVICE_URL = os.getenv("DL_SERVICE_URL", "http://localhost:8003")
 
 # Initialize database on startup
 @app.on_event("startup")
