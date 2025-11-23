@@ -147,7 +147,7 @@ async function generateForecast() {
         // Update chart with both historical and forecast
         updateMainChart(histData.data, result.forecasts);
 
-        alert(`✓ Forecast generated for ${currentCity} using ${model.toUpperCase()}`);
+        // Success - no popup needed, chart shows the result
 
     } catch (error) {
         console.error('Error generating forecast:', error);
