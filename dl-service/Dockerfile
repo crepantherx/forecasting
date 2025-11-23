@@ -7,5 +7,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use PORT environment variable (Render sets this to 10000)
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8003}
+# Use PORT environment variable (handled in main.py)
+CMD ["python", "main.py"]
