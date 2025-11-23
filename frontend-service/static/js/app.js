@@ -6,6 +6,34 @@ let workloadChart = null;
 let performanceChart = null;
 let currentForecast = null;
 
+// Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const themeText = document.getElementById('themeText');
+
+// Load saved theme or default to light
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeButton(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeButton(newTheme);
+});
+
+function updateThemeButton(theme) {
+    if (theme === 'dark') {
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Light';
+    } else {
+        themeIcon.textContent = '🌙';
+        themeText.textContent = 'Dark';
+    }
+}
+
 // Tab switching
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -287,32 +315,31 @@ async function loadCompleteData() {
     showLoading();
     try {
         let url = `${API_URL}/data/history?days=365`;
-        if (filterCity) url += `&city=${filterCity}`;
+        if (filterCity) {
+            url += `&city=${filterCity}`;
+        } else {
+            // If no city filter, get data for all cities by making multiple requests
+            const cities = ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide', 'Canberra'];
+            let allData = [];
+
+            for (const city of cities) {
+                const response = await fetch(`${API_URL}/data/history?city=${city}&days=365`);
+                const result = await response.json();
+                allData = allData.concat(result.data);
+            }
+
+            // Sort by date
+            allData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            displayDataTable(allData);
+            hideLoading();
+            return;
+        }
 
         const response = await fetch(url);
         const result = await response.json();
 
-        // Create table
-        let html = '<table><thead><tr>';
-        html += '<th>Date</th><th>City</th><th>Requests</th><th>Temp (°C)</th><th>Rain (mm)</th><th>Weekend</th><th>Holiday</th>';
-        html += '</tr></thead><tbody>';
-
-        result.data.forEach(row => {
-            html += `<tr>
-                <td>${row.date}</td>
-                <td>${row.city}</td>
-                <td><strong>${row.request_count}</strong></td>
-                <td>${row.temperature_c}</td>
-                <td>${row.rainfall_mm}</td>
-                <td>${row.is_weekend ? '✓' : ''}</td>
-                <td>${row.is_holiday ? '✓' : ''}</td>
-            </tr>`;
-        });
-
-        html += '</tbody></table>';
-        html = `<p style="margin-bottom: 10px;"><strong>${result.data.length}</strong> records found</p>` + html;
-
-        document.getElementById('dataTable').innerHTML = html;
+        displayDataTable(result.data);
 
     } catch (error) {
         console.error('Error loading data:', error);
@@ -320,6 +347,30 @@ async function loadCompleteData() {
     } finally {
         hideLoading();
     }
+}
+
+function displayDataTable(data) {
+    // Create table
+    let html = '<table><thead><tr>';
+    html += '<th>Date</th><th>City</th><th>Requests</th><th>Temp (°C)</th><th>Rain (mm)</th><th>Weekend</th><th>Holiday</th>';
+    html += '</tr></thead><tbody>';
+
+    data.forEach(row => {
+        html += `<tr>
+            <td>${row.date}</td>
+            <td>${row.city}</td>
+            <td><strong>${row.request_count}</strong></td>
+            <td>${row.temperature_c}</td>
+            <td>${row.rainfall_mm}</td>
+            <td>${row.is_weekend ? '✓' : ''}</td>
+            <td>${row.is_holiday ? '✓' : ''}</td>
+        </tr>`;
+    });
+
+    html += '</tbody></table>';
+    html = `<p style="margin-bottom: 10px;"><strong>${data.length}</strong> records found</p>` + html;
+
+    document.getElementById('dataTable').innerHTML = html;
 }
 
 // Load performance

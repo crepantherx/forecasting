@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WiFi Demand Forecasting - Australian Cities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,14 +15,20 @@
 <body>
     <div class="container">
         <header>
-            <h1>WiFi Service Demand Forecasting</h1>
-            <p>Australian Cities - Predictive Analytics Dashboard</p>
+            <div class="header-content">
+                <h1>WiFi Service Demand Forecasting</h1>
+                <p>Predictive Analytics for Australian Cities</p>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span>
+                <span id="themeText">Dark</span>
+            </button>
         </header>
 
         <!-- Navigation -->
         <nav class="tabs">
             <button class="tab-btn active" data-tab="overview">Overview & Forecast</button>
-            <button class="tab-btn" data-tab="engineer">Service Engineer View</button>
+            <button class="tab-btn" data-tab="engineer">Service Engineer</button>
             <button class="tab-btn" data-tab="emulation">Emulation & Data</button>
             <button class="tab-btn" data-tab="performance">Performance</button>
         </nav>
@@ -28,7 +37,7 @@
         <div id="overview" class="tab-content active">
             <div class="grid-2">
                 <div class="card">
-                    <h2>City Selector</h2>
+                    <h2>City Selection</h2>
                     <select id="citySelect" class="city-select">
                         <option value="Sydney">Sydney</option>
                         <option value="Melbourne">Melbourne</option>
@@ -40,7 +49,7 @@
                     <div id="currentStats" style="margin-top: 20px;"></div>
                 </div>
                 <div class="card">
-                    <h2>Generate Forecast</h2>
+                    <h2>Forecast Configuration</h2>
                     <div class="form-grid">
                         <div>
                             <label>Model</label>
@@ -64,15 +73,16 @@
                             </select>
                         </div>
                         <div>
-                            <label>Days</label>
+                            <label>Horizon (Days)</label>
                             <input type="number" id="forecastHorizon" value="7" min="1" max="14">
                         </div>
                     </div>
-                    <button id="generateForecastBtn" class="btn btn-primary">Generate Forecast</button>
+                    <button id="generateForecastBtn" class="btn btn-primary" style="width: 100%;">Generate
+                        Forecast</button>
                 </div>
             </div>
             <div class="card">
-                <h2>Historical Data + Forecast (Live)</h2>
+                <h2>Historical Data + Forecast</h2>
                 <canvas id="mainChart"></canvas>
             </div>
         </div>
@@ -80,8 +90,9 @@
         <!-- Service Engineer View -->
         <div id="engineer" class="tab-content">
             <div class="card">
-                <h2>🔧 Service Engineer Tablet View</h2>
-                <p>Simulates what engineers see on their tablets with smart job allocation</p>
+                <h2>🔧 Service Engineer Dashboard</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Smart job allocation based on location and
+                    demand</p>
                 <div class="form-grid">
                     <div>
                         <label>Engineer Name</label>
@@ -98,17 +109,18 @@
                             <option value="Canberra">Canberra</option>
                         </select>
                     </div>
-                    <div>
-                        <button id="loadJobsBtn" class="btn btn-success">Load Available Jobs</button>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button id="loadJobsBtn" class="btn btn-success" style="width: 100%;">Load Available
+                            Jobs</button>
                     </div>
                 </div>
             </div>
             <div class="card">
-                <h2>Available Jobs (Smart Allocation)</h2>
+                <h2>Available Jobs</h2>
                 <div id="jobsList"></div>
             </div>
             <div class="card">
-                <h2>Workload Distribution Across Cities</h2>
+                <h2>Workload Distribution</h2>
                 <canvas id="workloadChart"></canvas>
             </div>
         </div>
@@ -130,7 +142,7 @@
                         </select>
                     </div>
                     <div>
-                        <label>Actual Request Count</label>
+                        <label>Request Count</label>
                         <input type="number" id="emulateCount" value="150" min="0">
                     </div>
                     <div>
@@ -146,18 +158,20 @@
                 <div id="emulationResults" style="margin-top: 15px;"></div>
             </div>
             <div class="card">
-                <h2>Complete Dataset (All Cities)</h2>
-                <div style="margin-bottom: 10px;">
-                    <label>Filter by City:</label>
-                    <select id="dataFilterCity">
-                        <option value="">All Cities</option>
-                        <option value="Sydney">Sydney</option>
-                        <option value="Melbourne">Melbourne</option>
-                        <option value="Brisbane">Brisbane</option>
-                        <option value="Perth">Perth</option>
-                        <option value="Adelaide">Adelaide</option>
-                        <option value="Canberra">Canberra</option>
-                    </select>
+                <h2>Complete Dataset</h2>
+                <div style="margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label>Filter by City</label>
+                        <select id="dataFilterCity">
+                            <option value="">All Cities</option>
+                            <option value="Sydney">Sydney</option>
+                            <option value="Melbourne">Melbourne</option>
+                            <option value="Brisbane">Brisbane</option>
+                            <option value="Perth">Perth</option>
+                            <option value="Adelaide">Adelaide</option>
+                            <option value="Canberra">Canberra</option>
+                        </select>
+                    </div>
                     <button id="loadDataBtn" class="btn btn-primary">Load Data</button>
                 </div>
                 <div id="dataTable" style="max-height: 500px; overflow-y: auto;"></div>
